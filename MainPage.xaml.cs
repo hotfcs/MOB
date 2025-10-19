@@ -133,15 +133,42 @@ public partial class MainPage : ContentPage
 		}
 	}
 
-	private void OnMediaCaptured(object? sender, MediaCapturedEventArgs e)
+	private async void OnMediaCaptured(object? sender, MediaCapturedEventArgs e)
 	{
-		// 실시간으로 감지 상태 업데이트
-		// 실제 감지는 백그라운드에서 진행되므로 여기서는 시뮬레이션
-		var random = new Random();
-		_viewModel.DetectedFaceCount = random.Next(0, 3);
-		_viewModel.DetectionTestStatus = _viewModel.DetectedFaceCount > 0 
-			? $"✅ {_viewModel.DetectedFaceCount}개 얼굴 감지됨"
-			: "⏳ 얼굴을 찾는 중...";
+		try
+		{
+			// 캡처된 미디어가 있는지 확인
+			if (e?.Media == null)
+			{
+				System.Diagnostics.Debug.WriteLine("No media captured");
+				return;
+			}
+
+			// 이미지 데이터를 바이트 배열로 변환
+			byte[] imageData;
+			using (var stream = e.Media)
+			{
+				using var memoryStream = new MemoryStream();
+				await stream.CopyToAsync(memoryStream);
+				imageData = memoryStream.ToArray();
+			}
+
+			// 실제 얼굴 감지 수행
+			if (imageData.Length > 0)
+			{
+				await _viewModel.ProcessCameraFrameAsync(imageData);
+			}
+		}
+		catch (Exception ex)
+		{
+			System.Diagnostics.Debug.WriteLine($"Media capture processing error: {ex.Message}");
+			
+			// 오류 발생 시에도 UI 업데이트
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				_viewModel.DetectionTestStatus = $"⚠️ 처리 오류: {ex.Message}";
+			});
+		}
 	}
 
 	private void StopCameraPreview()

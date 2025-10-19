@@ -190,6 +190,11 @@ public partial class MainViewModel : BaseViewModel
     private string detectionTestStatus = "대기 중";
 
     /// <summary>
+    /// 카메라 프레임 처리 중 여부
+    /// </summary>
+    private bool _isProcessingFrame;
+
+    /// <summary>
     /// 감지 테스트 토글 커맨드
     /// 클릭 시 카메라를 활성화하고 영상과 감지 상태를 표시
     /// </summary>
@@ -419,6 +424,50 @@ public partial class MainViewModel : BaseViewModel
         else
         {
             StatusMessage = "감지 중지됨";
+        }
+    }
+
+    /// <summary>
+    /// 카메라 프레임으로 실제 얼굴 감지 수행
+    /// </summary>
+    public async Task ProcessCameraFrameAsync(byte[] frameData)
+    {
+        if (_isProcessingFrame || !_faceDetectionService.IsInitialized)
+            return;
+
+        try
+        {
+            _isProcessingFrame = true;
+
+            var result = await _faceDetectionService.DetectFacesAsync(frameData);
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                DetectedFaceCount = result.FaceCount;
+                
+                if (result.FaceCount == 0)
+                {
+                    DetectionTestStatus = "⏳ 얼굴을 찾는 중...";
+                }
+                else if (result.FaceCount == 1)
+                {
+                    DetectionTestStatus = result.HasPeekingDetected 
+                        ? "⚠️ 측면에서 감지됨!" 
+                        : "✅ 1개 얼굴 감지됨";
+                }
+                else
+                {
+                    DetectionTestStatus = $"⚠️ {result.FaceCount}개 얼굴 감지됨 (엿보기 가능성)";
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Frame processing error: {ex.Message}");
+        }
+        finally
+        {
+            _isProcessingFrame = false;
         }
     }
 
