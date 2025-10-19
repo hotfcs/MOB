@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MauiApp.ViewModels"
+             xmlns:models="clr-namespace:MauiApp.Models"
+             x:Class="MauiApp.Views.SettingsPage"
+             Title="설정"
+             x:DataType="vm:SettingsViewModel">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="20">
+            
+            <!-- 보호 동작 설정 -->
+            <Frame BorderColor="{StaticResource Primary}" 
+                   HasShadow="True"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="보호 동작 설정" 
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <Label Text="엿보기가 감지되었을 때 수행할 동작을 선택하세요."
+                           FontSize="12"
+                           TextColor="{StaticResource Gray600}"/>
+
+                    <RadioButton Content="화면 블러 처리" 
+                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Blur}}"
+                                 GroupName="ProtectionAction"/>
+                    
+                    <RadioButton Content="위장 화면 표시" 
+                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Disguise}}"
+                                 GroupName="ProtectionAction"/>
+                    
+                    <RadioButton Content="화면 가리기" 
+                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Cover}}"
+                                 GroupName="ProtectionAction"/>
+                    
+                    <RadioButton Content="진동만" 
+                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.VibrateOnly}}"
+                                 GroupName="ProtectionAction"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 감지 설정 -->
+            <Frame BorderColor="{StaticResource Primary}" 
+                   HasShadow="True"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="감지 설정" 
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding ThresholdSeconds, StringFormat='지속 주시 시간: {0:F1}초'}"
+                               FontSize="14"/>
+                        <Slider Minimum="0.5" 
+                                Maximum="5.0" 
+                                Value="{Binding ThresholdSeconds}"
+                                MinimumTrackColor="{StaticResource Primary}"/>
+                        <Label Text="이 시간 이상 측면에서 주시하면 엿보기로 판단합니다."
+                               FontSize="10"
+                               TextColor="{StaticResource Gray600}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 알림 설정 -->
+            <Frame BorderColor="{StaticResource Primary}" 
+                   HasShadow="True"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="알림 설정" 
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Text="진동 알림" 
+                               VerticalOptions="Center"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding VibrateEnabled}"
+                                OnColor="{StaticResource Primary}"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray300}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Text="소리 알림" 
+                               VerticalOptions="Center"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding SoundEnabled}"
+                                OnColor="{StaticResource Primary}"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 보안 설정 -->
+            <Frame BorderColor="{StaticResource Primary}" 
+                   HasShadow="True"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="보안 설정" 
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <VerticalStackLayout>
+                            <Label Text="엿보는 사람 사진 촬영" 
+                                   FontSize="16"/>
+                            <Label Text="감지 시 자동으로 사진을 저장합니다."
+                                   FontSize="10"
+                                   TextColor="{StaticResource Gray600}"/>
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding CapturePhotoEnabled}"
+                                OnColor="{StaticResource Primary}"
+                                VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 프라이버시 정보 -->
+            <Frame BorderColor="{StaticResource Gray300}" 
+                   HasShadow="False"
+                   Padding="15"
+                   CornerRadius="10"
+                   BackgroundColor="{StaticResource Gray100}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="🔒 프라이버시 보호" 
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+                    <Label FontSize="11" TextColor="{StaticResource Gray900}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="• 모든 데이터는 기기 내부에서만 처리됩니다.&#10;"/>
+                                <Span Text="• 카메라 영상은 서버로 전송되지 않습니다.&#10;"/>
+                                <Span Text="• 사진 촬영 기능은 사용자가 직접 활성화해야 합니다.&#10;"/>
+                                <Span Text="• 언제든지 설정을 변경할 수 있습니다."/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 저장 버튼 -->
+            <Button Text="💾 설정 저장"
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    HeightRequest="50"/>
+
+            <Button Text="← 돌아가기"
+                    Command="{Binding BackCommand}"
+                    BackgroundColor="{StaticResource Gray500}"
+                    TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+

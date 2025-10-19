@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MauiApp.ViewModels"
+             xmlns:models="clr-namespace:MauiApp.Models"
+             x:Class="MauiApp.MainPage"
+             Title="화면 엿보기 방지"
+             x:DataType="vm:MainViewModel">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- 헤더 -->
+        <Frame BackgroundColor="{StaticResource Primary}" 
+               Padding="20"
+               CornerRadius="0">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="👁️ 화면 엿보기 방지" 
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+                <Label Text="{Binding StatusMessage}"
+                       FontSize="14"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- 메인 콘텐츠 -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- 감지 상태 카드 -->
+                <Frame BorderColor="{StaticResource Primary}" 
+                       HasShadow="True"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="감지 상태" 
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Label Text="엿보기 감지" 
+                                   VerticalOptions="Center"
+                                   FontSize="16"/>
+                            <Switch Grid.Column="1" 
+                                    IsToggled="{Binding IsDetectionActive}"
+                                    OnColor="{StaticResource Primary}"
+                                    ThumbColor="White"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" 
+                                 BackgroundColor="{StaticResource Gray300}"/>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="감지 횟수:" 
+                                   FontSize="14"
+                                   VerticalOptions="Center"/>
+                            <Label Text="{Binding PeekingCount}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Primary}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 모드 선택 카드 -->
+                <Frame BorderColor="{StaticResource Primary}" 
+                       HasShadow="True"
+                       Padding="15"
+                       CornerRadius="10">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="감지 모드" 
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        
+                        <Label Text="{Binding ModeDescription}"
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"/>
+
+                        <Grid ColumnDefinitions="*,*" 
+                              RowDefinitions="Auto,Auto"
+                              ColumnSpacing="10"
+                              RowSpacing="10">
+                            
+                            <Button Grid.Row="0" Grid.Column="0"
+                                    Text="🚇 출퇴근"
+                                    Command="{Binding ChangeModeCommand}"
+                                    CommandParameter="{x:Static models:DetectionMode.Commute}"
+                                    BackgroundColor="{StaticResource Primary}"/>
+                            
+                            <Button Grid.Row="0" Grid.Column="1"
+                                    Text="💼 사무실"
+                                    Command="{Binding ChangeModeCommand}"
+                                    CommandParameter="{x:Static models:DetectionMode.Office}"
+                                    BackgroundColor="{StaticResource Secondary}"/>
+                            
+                            <Button Grid.Row="1" Grid.Column="0"
+                                    Text="👥 회의"
+                                    Command="{Binding ChangeModeCommand}"
+                                    CommandParameter="{x:Static models:DetectionMode.Meeting}"
+                                    BackgroundColor="{StaticResource Tertiary}"/>
+                            
+                            <Button Grid.Row="1" Grid.Column="1"
+                                    Text="⚙️ 사용자 정의"
+                                    Command="{Binding ChangeModeCommand}"
+                                    CommandParameter="{x:Static models:DetectionMode.Custom}"
+                                    BackgroundColor="{StaticResource Gray500}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 설명 카드 -->
+                <Frame BorderColor="{StaticResource Gray300}" 
+                       HasShadow="False"
+                       Padding="15"
+                       CornerRadius="10"
+                       BackgroundColor="{StaticResource Gray100}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="ℹ️ 사용 방법" 
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                        <Label FontSize="12" TextColor="{StaticResource Gray900}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="1. 감지를 활성화하면 전면 카메라로 얼굴을 감지합니다.&#10;"/>
+                                    <Span Text="2. 여러 얼굴이 감지되거나 측면에서 보는 사람이 감지되면 경고합니다.&#10;"/>
+                                    <Span Text="3. 모드에 따라 다른 민감도로 동작합니다.&#10;"/>
+                                    <Span Text="4. 설정에서 보호 방법을 변경할 수 있습니다."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 하단 버튼 -->
+        <Button Grid.Row="2"
+                Text="⚙️ 설정"
+                Command="{Binding OpenSettingsCommand}"
+                Margin="20"
+                BackgroundColor="{StaticResource Gray500}"
+                TextColor="White"/>
+
+        <!-- 보호 오버레이 -->
+        <Grid Grid.RowSpan="3" 
+              BackgroundColor="#CC000000"
+              IsVisible="{Binding IsProtectionOverlayVisible}"
+              InputTransparent="False">
+            <VerticalStackLayout Spacing="20" 
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                <Label Text="⚠️ 엿보기 감지됨!" 
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+                
+                <Frame BackgroundColor="White" 
+                       Padding="30"
+                       CornerRadius="20"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="누군가 화면을 엿보고 있습니다."
+                               FontSize="18"
+                               HorizontalOptions="Center"/>
+                        <Label Text="확인 버튼을 눌러 화면을 복구하세요."
+                               FontSize="14"
+                               TextColor="{StaticResource Gray600}"
+                               HorizontalOptions="Center"/>
+                        <Button Text="확인"
+                                Command="{Binding DismissProtectionCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+
+</ContentPage>
