@@ -148,8 +148,8 @@
                     BackgroundColor="{StaticResource Gray500}"
                     TextColor="White"/>
             <Button Grid.Column="1"
-                    Text="🔍 상태 체크"
-                    Command="{Binding TestFaceDetectionCommand}"
+                    Text="{Binding IsCameraModeVisible, Converter={StaticResource BoolToTextConverter}}"
+                    Command="{Binding ToggleCameraModeCommand}"
                     BackgroundColor="{StaticResource Tertiary}"
                     TextColor="White"/>
         </Grid>
@@ -211,6 +211,90 @@
             <ContentView x:Name="DisguiseContainer" 
                          IsVisible="False"/>
 
+        </Grid>
+
+        <!-- 카메라 모드 오버레이 -->
+        <Grid Grid.RowSpan="3"
+              IsVisible="{Binding IsCameraModeVisible}"
+              BackgroundColor="Black">
+            
+            <VerticalStackLayout Spacing="0">
+                <!-- 카메라 프리뷰 영역 -->
+                <Grid HeightRequest="500" BackgroundColor="Black">
+                    <ContentView x:Name="CameraPreviewContainer"/>
+                    
+                    <!-- 가이드 오버레이 -->
+                    <Grid>
+                        <!-- 중앙 가이드 프레임 -->
+                        <Border WidthRequest="200"
+                                HeightRequest="250"
+                                Stroke="White"
+                                StrokeThickness="2"
+                                StrokeDashArray="5,5"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BackgroundColor="Transparent"/>
+                        
+                        <Label Text="얼굴을 화면 중앙에 위치시키세요"
+                               TextColor="White"
+                               FontSize="16"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Start"
+                               Margin="0,20,0,0"
+                               BackgroundColor="#80000000"
+                               Padding="15,8"/>
+                    </Grid>
+                </Grid>
+
+                <!-- 정보 패널 -->
+                <Frame Margin="20"
+                       Padding="20"
+                       BackgroundColor="#1a1a1a"
+                       CornerRadius="15"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="📹 카메라 모드"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                        
+                        <BoxView HeightRequest="1" BackgroundColor="#444"/>
+                        
+                        <Grid ColumnDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10">
+                            <Label Text="📷" FontSize="18"/>
+                            <Label Grid.Column="1" 
+                                   Text="카메라 활성화됨"
+                                   TextColor="#4CAF50"
+                                   VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="1" Text="🤖" FontSize="18"/>
+                            <Label Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding StatusMessage}"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="2" Text="👤" FontSize="18"/>
+                            <Label Grid.Row="2" Grid.Column="1"
+                                   Text="실시간 얼굴 감지 중..."
+                                   TextColor="#2196F3"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="ℹ️ 카메라 앞에 얼굴을 위치시켜 얼굴 감지를 테스트하세요."
+                               FontSize="12"
+                               TextColor="#aaa"
+                               HorizontalTextAlignment="Center"
+                               LineBreakMode="WordWrap"/>
+
+                        <Button Text="✖️ 카메라 모드 종료"
+                                Command="{Binding ToggleCameraModeCommand}"
+                                BackgroundColor="#d32f2f"
+                                TextColor="White"
+                                HeightRequest="50"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
         </Grid>
     </Grid>
 
