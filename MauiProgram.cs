@@ -34,10 +34,12 @@ public static class MauiProgram
 		// ViewModels 등록
 		builder.Services.AddSingleton<MainViewModel>();
 		builder.Services.AddTransient<SettingsViewModel>();
+		builder.Services.AddTransient<TestModeViewModel>();
 		
 		// Views 등록
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddTransient<SettingsPage>();
+		builder.Services.AddTransient<TestModePage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

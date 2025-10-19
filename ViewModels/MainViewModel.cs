@@ -172,6 +172,16 @@ public partial class MainViewModel : BaseViewModel
     }
 
     /// <summary>
+    /// 테스트 모드 열기 커맨드
+    /// [RelayCommand]로 OpenTestModeCommand 자동 생성
+    /// </summary>
+    [RelayCommand]
+    private async Task OpenTestModeAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(Views.TestModePage));
+    }
+
+    /// <summary>
     /// 보호 해제 커맨드
     /// [RelayCommand]로 DismissProtectionCommand 자동 생성
     /// </summary>

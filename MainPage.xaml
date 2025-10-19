@@ -138,12 +138,20 @@
         </ScrollView>
 
         <!-- 하단 버튼 -->
-        <Button Grid.Row="2"
-                Text="⚙️ 설정"
-                Command="{Binding OpenSettingsCommand}"
-                Margin="20"
-                BackgroundColor="{StaticResource Gray500}"
-                TextColor="White"/>
+        <Grid Grid.Row="2" 
+              Margin="20"
+              ColumnDefinitions="*,*"
+              ColumnSpacing="10">
+            <Button Text="⚙️ 설정"
+                    Command="{Binding OpenSettingsCommand}"
+                    BackgroundColor="{StaticResource Gray500}"
+                    TextColor="White"/>
+            <Button Grid.Column="1"
+                    Text="🧪 테스트"
+                    Command="{Binding OpenTestModeCommand}"
+                    BackgroundColor="{StaticResource Tertiary}"
+                    TextColor="White"/>
+        </Grid>
 
         <!-- 보호 오버레이/위장 화면 -->
         <Grid Grid.RowSpan="3" 
