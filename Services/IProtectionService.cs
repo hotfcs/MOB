@@ -7,10 +7,19 @@ namespace MauiApp.Services;
 /// </summary>
 public interface IProtectionService
 {
-    Task ActivateProtectionAsync(ProtectionAction action);
+    Task ActivateProtectionAsync(ProtectionAction action, DisguiseType disguiseType = DisguiseType.News);
     Task DeactivateProtectionAsync();
     Task VibrateAsync();
     Task PlayAlertSoundAsync();
     bool IsProtectionActive { get; }
+    
+    event EventHandler<ProtectionActivatedEventArgs>? ProtectionActivated;
+    event EventHandler? ProtectionDeactivated;
+}
+
+public class ProtectionActivatedEventArgs : EventArgs
+{
+    public ProtectionAction Action { get; set; }
+    public DisguiseType DisguiseType { get; set; }
 }
 

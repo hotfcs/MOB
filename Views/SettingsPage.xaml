@@ -25,20 +25,67 @@
                            TextColor="{StaticResource Gray600}"/>
 
                     <RadioButton Content="화면 블러 처리" 
-                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Blur}}"
-                                 GroupName="ProtectionAction"/>
+                                 Value="0"
+                                 GroupName="ProtectionAction"
+                                 CheckedChanged="OnProtectionActionChanged"/>
                     
                     <RadioButton Content="위장 화면 표시" 
-                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Disguise}}"
-                                 GroupName="ProtectionAction"/>
+                                 Value="1"
+                                 GroupName="ProtectionAction"
+                                 CheckedChanged="OnProtectionActionChanged"/>
                     
                     <RadioButton Content="화면 가리기" 
-                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.Cover}}"
-                                 GroupName="ProtectionAction"/>
+                                 Value="2"
+                                 GroupName="ProtectionAction"
+                                 CheckedChanged="OnProtectionActionChanged"/>
                     
                     <RadioButton Content="진동만" 
-                                 IsChecked="{Binding SelectedProtectionAction, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static models:ProtectionAction.VibrateOnly}}"
-                                 GroupName="ProtectionAction"/>
+                                 Value="3"
+                                 GroupName="ProtectionAction"
+                                 CheckedChanged="OnProtectionActionChanged"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 위장 화면 타입 선택 -->
+            <Frame x:Name="DisguiseTypeFrame"
+                   IsVisible="False"
+                   BorderColor="{StaticResource Primary}" 
+                   HasShadow="True"
+                   Padding="15"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="위장 화면 종류" 
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <Label Text="엿보기 감지 시 표시할 위장 화면을 선택하세요."
+                           FontSize="12"
+                           TextColor="{StaticResource Gray600}"/>
+
+                    <RadioButton Content="📰 뉴스" 
+                                 Value="0"
+                                 GroupName="DisguiseType"
+                                 CheckedChanged="OnDisguiseTypeChanged"/>
+                    
+                    <RadioButton Content="📈 주식 시장" 
+                                 Value="1"
+                                 GroupName="DisguiseType"
+                                 CheckedChanged="OnDisguiseTypeChanged"/>
+                    
+                    <RadioButton Content="📖 전자책" 
+                                 Value="2"
+                                 GroupName="DisguiseType"
+                                 CheckedChanged="OnDisguiseTypeChanged"/>
+                    
+                    <RadioButton Content="🧮 계산기" 
+                                 Value="3"
+                                 GroupName="DisguiseType"
+                                 CheckedChanged="OnDisguiseTypeChanged"/>
+                    
+                    <RadioButton Content="📅 캘린더" 
+                                 Value="4"
+                                 GroupName="DisguiseType"
+                                 CheckedChanged="OnDisguiseTypeChanged"/>
                 </VerticalStackLayout>
             </Frame>
 

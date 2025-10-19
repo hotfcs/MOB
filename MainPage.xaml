@@ -145,39 +145,63 @@
                 BackgroundColor="{StaticResource Gray500}"
                 TextColor="White"/>
 
-        <!-- 보호 오버레이 -->
+        <!-- 보호 오버레이/위장 화면 -->
         <Grid Grid.RowSpan="3" 
-              BackgroundColor="#CC000000"
+              x:Name="ProtectionOverlay"
               IsVisible="{Binding IsProtectionOverlayVisible}"
               InputTransparent="False">
-            <VerticalStackLayout Spacing="20" 
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center">
-                <Label Text="⚠️ 엿보기 감지됨!" 
-                       FontSize="32"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"/>
-                
-                <Frame BackgroundColor="White" 
-                       Padding="30"
-                       CornerRadius="20"
-                       HasShadow="True">
-                    <VerticalStackLayout Spacing="15">
-                        <Label Text="누군가 화면을 엿보고 있습니다."
-                               FontSize="18"
-                               HorizontalOptions="Center"/>
-                        <Label Text="확인 버튼을 눌러 화면을 복구하세요."
-                               FontSize="14"
-                               TextColor="{StaticResource Gray600}"
-                               HorizontalOptions="Center"/>
-                        <Button Text="확인"
-                                Command="{Binding DismissProtectionCommand}"
-                                BackgroundColor="{StaticResource Primary}"
-                                TextColor="White"/>
-                    </VerticalStackLayout>
-                </Frame>
-            </VerticalStackLayout>
+            
+            <!-- 블러 효과 (Blur) -->
+            <Grid x:Name="BlurOverlay" 
+                  IsVisible="False"
+                  BackgroundColor="#F0FFFFFF">
+                <VerticalStackLayout Spacing="20" 
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <Label Text="⚠️ 엿보기 감지됨!" 
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="#333"
+                           HorizontalOptions="Center"/>
+                    
+                    <Button Text="확인"
+                            Command="{Binding DismissProtectionCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            WidthRequest="120"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- 화면 가리기 (Cover) -->
+            <Grid x:Name="CoverOverlay" 
+                  IsVisible="False"
+                  BackgroundColor="Black">
+                <VerticalStackLayout Spacing="20" 
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+                    <Label Text="⚠️" 
+                           FontSize="72"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="엿보기 감지됨" 
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    
+                    <Button Text="확인"
+                            Command="{Binding DismissProtectionCommand}"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            WidthRequest="120"
+                            Margin="0,20,0,0"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- 위장 화면 컨테이너 (Disguise) -->
+            <ContentView x:Name="DisguiseContainer" 
+                         IsVisible="False"/>
+
         </Grid>
     </Grid>
 

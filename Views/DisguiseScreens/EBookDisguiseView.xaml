@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp.Views.DisguiseScreens.EBookDisguiseView">
+    
+    <Grid BackgroundColor="#f5f3ed" RowDefinitions="Auto,*,Auto">
+        
+        <!-- 헤더 -->
+        <Grid Padding="15,10"
+              BackgroundColor="White"
+              ColumnDefinitions="Auto,*,Auto">
+            <Label Text="📖"
+                   FontSize="24"
+                   VerticalOptions="Center"/>
+            <Label Grid.Column="1"
+                   x:Name="BookTitleLabel"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="#333"
+                   VerticalOptions="Center"
+                   Margin="10,0"/>
+            <Label Grid.Column="2"
+                   x:Name="PageLabel"
+                   FontSize="14"
+                   TextColor="#666"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- 책 내용 -->
+        <ScrollView Grid.Row="1" Padding="25,20">
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- 챕터 -->
+                <Label x:Name="ChapterLabel"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#2c2c2c"
+                       HorizontalTextAlignment="Center"/>
+
+                <BoxView HeightRequest="1"
+                         BackgroundColor="#d0d0d0"
+                         HorizontalOptions="Center"
+                         WidthRequest="100"/>
+
+                <!-- 본문 -->
+                <Label x:Name="ContentLabel"
+                       FontSize="17"
+                       TextColor="#4a4a4a"
+                       LineHeight="1.8"
+                       LineBreakMode="WordWrap"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 하단 컨트롤 -->
+        <Grid Grid.Row="2"
+              Padding="20,15"
+              BackgroundColor="White"
+              ColumnDefinitions="Auto,*,Auto"
+              RowDefinitions="Auto,Auto">
+            
+            <!-- 진행률 바 -->
+            <ProgressBar Grid.ColumnSpan="3"
+                         x:Name="ProgressBar"
+                         ProgressColor="#8b7355"
+                         Margin="0,0,0,10"/>
+
+            <!-- 버튼들 -->
+            <Button Text="◀"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="#8b7355"
+                    WidthRequest="50"
+                    HeightRequest="50"/>
+            <Label Grid.Column="1"
+                   x:Name="ProgressLabel"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   TextColor="#666"
+                   FontSize="13"/>
+            <Button Grid.Column="2"
+                    Text="▶"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="#8b7355"
+                    WidthRequest="50"
+                    HeightRequest="50"/>
+        </Grid>
+        
+    </Grid>
+    
+</ContentView>
+

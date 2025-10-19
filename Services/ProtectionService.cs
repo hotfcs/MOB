@@ -9,15 +9,22 @@ public class ProtectionService : IProtectionService
 {
     public bool IsProtectionActive { get; private set; }
     
-    public event EventHandler<ProtectionAction>? ProtectionActivated;
+    public event EventHandler<ProtectionActivatedEventArgs>? ProtectionActivated;
     public event EventHandler? ProtectionDeactivated;
 
-    public Task ActivateProtectionAsync(ProtectionAction action)
+    public Task ActivateProtectionAsync(ProtectionAction action, DisguiseType disguiseType = DisguiseType.News)
     {
         IsProtectionActive = true;
-        ProtectionActivated?.Invoke(this, action);
         
-        System.Diagnostics.Debug.WriteLine($"Protection activated: {action}");
+        var args = new ProtectionActivatedEventArgs
+        {
+            Action = action,
+            DisguiseType = disguiseType
+        };
+        
+        ProtectionActivated?.Invoke(this, args);
+        
+        System.Diagnostics.Debug.WriteLine($"Protection activated: {action}, Disguise: {disguiseType}");
         return Task.CompletedTask;
     }
 

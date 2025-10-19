@@ -91,6 +91,20 @@ public partial class MainViewModel : BaseViewModel
 
     #endregion
 
+    #region Events
+
+    /// <summary>
+    /// 보호 활성화 이벤트
+    /// </summary>
+    public event Action<ProtectionAction, DisguiseType>? ProtectionActivatedEvent;
+
+    /// <summary>
+    /// 보호 비활성화 이벤트
+    /// </summary>
+    public event Action? ProtectionDeactivatedEvent;
+
+    #endregion
+
     #region Constructor
 
     public MainViewModel(
@@ -166,6 +180,10 @@ public partial class MainViewModel : BaseViewModel
     {
         _ = _protectionService.DeactivateProtectionAsync();
         IsProtectionOverlayVisible = false;
+        
+        // 이벤트 발생
+        ProtectionDeactivatedEvent?.Invoke();
+        
         return Task.CompletedTask;
     }
 
@@ -299,7 +317,10 @@ public partial class MainViewModel : BaseViewModel
             {
                 CurrentProtectionAction = _settings.ProtectionAction;
                 IsProtectionOverlayVisible = true;
-                await _protectionService.ActivateProtectionAsync(_settings.ProtectionAction);
+                await _protectionService.ActivateProtectionAsync(_settings.ProtectionAction, _settings.DisguiseType);
+                
+                // 이벤트 발생
+                ProtectionActivatedEvent?.Invoke(_settings.ProtectionAction, _settings.DisguiseType);
             }
         });
     }

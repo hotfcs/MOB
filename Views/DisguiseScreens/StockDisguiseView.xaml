@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:MauiApp.Models"
+             x:Class="MauiApp.Views.DisguiseScreens.StockDisguiseView">
+    
+    <Grid BackgroundColor="#0d1117" RowDefinitions="Auto,*">
+        
+        <!-- 헤더 -->
+        <Grid Padding="15,10"
+              ColumnDefinitions="*,Auto">
+            <Label Text="📈 주식 시장"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   VerticalOptions="Center"/>
+            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                <Label Text="{Binding CurrentTime, StringFormat='{0:HH:mm:ss}'}"
+                       FontSize="14"
+                       TextColor="White"
+                       HorizontalOptions="End"/>
+                <Label Text="실시간"
+                       FontSize="11"
+                       TextColor="#58a6ff"
+                       HorizontalOptions="End"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- 시장 지수 -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0">
+                
+                <!-- 주요 지수 -->
+                <Frame Margin="10"
+                       Padding="15"
+                       BackgroundColor="#161b22"
+                       BorderColor="#30363d"
+                       CornerRadius="10"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="주요 지수"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        
+                        <Grid ColumnDefinitions="*,Auto,Auto" RowSpacing="10">
+                            <!-- KOSPI -->
+                            <Label Text="KOSPI" TextColor="White" FontSize="15" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="2,685.24" TextColor="White" FontSize="15" FontAttributes="Bold"/>
+                            <Label Grid.Column="2" Text="▲ 25.67 (+0.97%)" TextColor="#3fb950" FontSize="13" Margin="10,0,0,0"/>
+                            
+                            <!-- KOSDAQ -->
+                            <Label Grid.Row="1" Text="KOSDAQ" TextColor="White" FontSize="15" VerticalOptions="Center"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="845.32" TextColor="White" FontSize="15" FontAttributes="Bold"/>
+                            <Label Grid.Row="1" Grid.Column="2" Text="▼ 3.12 (-0.37%)" TextColor="#f85149" FontSize="13" Margin="10,0,0,0"/>
+                            
+                            <!-- S&amp;P 500 -->
+                            <Label Grid.Row="2" Text="S&amp;P 500" TextColor="White" FontSize="15" VerticalOptions="Center"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="5,123.45" TextColor="White" FontSize="15" FontAttributes="Bold"/>
+                            <Label Grid.Row="2" Grid.Column="2" Text="▲ 15.23 (+0.30%)" TextColor="#3fb950" FontSize="13" Margin="10,0,0,0"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 관심 종목 -->
+                <Label Text="관심 종목"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       Margin="15,10,15,5"/>
+
+                <!-- 주식 리스트 -->
+                <CollectionView x:Name="StockCollection"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:StockInfo">
+                            <Frame Margin="10,5"
+                                   Padding="15"
+                                   BackgroundColor="#161b22"
+                                   BorderColor="#30363d"
+                                   CornerRadius="10"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    
+                                    <!-- 종목명 -->
+                                    <Label Text="{Binding Symbol}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="White"/>
+                                    <Label Grid.Row="1"
+                                           Text="{Binding Name}"
+                                           FontSize="13"
+                                           TextColor="#8b949e"/>
+                                    
+                                    <!-- 가격 -->
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Price, StringFormat='${0:F2}'}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           HorizontalOptions="End"/>
+                                    
+                                    <!-- 변동 -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" 
+                                                         HorizontalOptions="End"
+                                                         Spacing="2">
+                                        <Label Text="{Binding Change, StringFormat='{0}{1:F2}'}"
+                                               FontSize="14"
+                                               TextColor="{Binding ChangeColor}"
+                                               HorizontalOptions="End">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding ChangeSign}"/>
+                                                    <Span Text="{Binding Change, StringFormat='{0:F2}'}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Text="{Binding ChangePercent, StringFormat='({0:F2}%)'}"
+                                               FontSize="13"
+                                               TextColor="{Binding ChangeColor}"
+                                               HorizontalOptions="End"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- 거래량 -->
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2"
+                                           Text="{Binding Volume, StringFormat='거래량: {0:N0}'}"
+                                           FontSize="12"
+                                           TextColor="#8b949e"
+                                           Margin="0,5,0,0"/>
+                                    
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </Grid>
+    
+</ContentView>
+
