@@ -172,13 +172,77 @@ public partial class MainViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// 테스트 모드 열기 커맨드
-    /// [RelayCommand]로 OpenTestModeCommand 자동 생성
+    /// 얼굴 감지 테스트 커맨드
+    /// 카메라 상태와 얼굴 인식 상태를 체크
     /// </summary>
     [RelayCommand]
-    private async Task OpenTestModeAsync()
+    private async Task TestFaceDetectionAsync()
     {
-        await Shell.Current.GoToAsync(nameof(Views.TestModePage));
+        try
+        {
+            IsBusy = true;
+            var messages = new List<string>();
+            
+            // 1. 카메라 상태 체크
+            messages.Add("📷 카메라 상태 체크...");
+            var cameraAvailable = _cameraService.IsCameraAvailable;
+            messages.Add($"  카메라 사용 가능: {(cameraAvailable ? "✅ 예" : "❌ 아니오")}");
+            
+            // 2. 카메라 권한 체크
+            var hasPermission = await _cameraService.RequestPermissionsAsync();
+            messages.Add($"  카메라 권한: {(hasPermission ? "✅ 허용됨" : "❌ 거부됨")}");
+            
+            // 3. 얼굴 인식 서비스 상태 체크
+            messages.Add("\n🤖 얼굴 인식 상태 체크...");
+            var isInitialized = _faceDetectionService.IsInitialized;
+            messages.Add($"  서비스 초기화: {(isInitialized ? "✅ 완료" : "❌ 미완료")}");
+            
+            if (!isInitialized)
+            {
+                messages.Add("  초기화 시도 중...");
+                var initSuccess = await _faceDetectionService.InitializeAsync();
+                messages.Add($"  초기화 결과: {(initSuccess ? "✅ 성공" : "❌ 실패")}");
+                
+                if (!initSuccess)
+                {
+                    messages.Add("\n⚠️ ONNX 모델 파일을 확인하세요:");
+                    messages.Add("  Resources/Raw/version-RFB-320.onnx");
+                }
+            }
+            
+            // 4. 얼굴 감지 테스트 (더미 데이터)
+            if (_faceDetectionService.IsInitialized)
+            {
+                messages.Add("\n🔍 얼굴 감지 테스트 실행...");
+                var testData = new byte[320 * 240 * 3];
+                var result = await _faceDetectionService.DetectFacesAsync(testData);
+                messages.Add($"  감지된 얼굴 수: {result.FaceCount}개");
+                messages.Add($"  엿보기 감지: {(result.HasPeekingDetected ? "⚠️ 예" : "✅ 아니오")}");
+            }
+            
+            // 5. 전체 시스템 상태
+            messages.Add("\n📊 전체 시스템 상태:");
+            messages.Add($"  카메라: {(cameraAvailable && hasPermission ? "✅ 준비됨" : "❌ 준비 안됨")}");
+            messages.Add($"  얼굴 감지: {(_faceDetectionService.IsInitialized ? "✅ 준비됨" : "❌ 준비 안됨")}");
+            messages.Add($"  현재 감지 상태: {(IsDetectionActive ? "🟢 활성화" : "⚪ 중지")}");
+            messages.Add($"  감지 모드: {ModeDescription}");
+            
+            await Shell.Current.DisplayAlert(
+                "얼굴 감지 테스트 결과",
+                string.Join("\n", messages),
+                "확인");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert(
+                "테스트 오류",
+                $"테스트 중 오류가 발생했습니다:\n{ex.Message}",
+                "확인");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     /// <summary>

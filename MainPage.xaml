@@ -127,7 +127,8 @@
                                     <Span Text="1. 감지를 활성화하면 전면 카메라로 얼굴을 감지합니다.&#10;"/>
                                     <Span Text="2. 여러 얼굴이 감지되거나 측면에서 보는 사람이 감지되면 경고합니다.&#10;"/>
                                     <Span Text="3. 모드에 따라 다른 민감도로 동작합니다.&#10;"/>
-                                    <Span Text="4. 설정에서 보호 방법을 변경할 수 있습니다."/>
+                                    <Span Text="4. 설정에서 보호 방법을 변경할 수 있습니다.&#10;"/>
+                                    <Span Text="5. '상태 체크' 버튼으로 카메라와 얼굴 인식 상태를 확인하세요." FontAttributes="Bold"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -147,8 +148,8 @@
                     BackgroundColor="{StaticResource Gray500}"
                     TextColor="White"/>
             <Button Grid.Column="1"
-                    Text="🧪 테스트"
-                    Command="{Binding OpenTestModeCommand}"
+                    Text="🔍 상태 체크"
+                    Command="{Binding TestFaceDetectionCommand}"
                     BackgroundColor="{StaticResource Tertiary}"
                     TextColor="White"/>
         </Grid>
