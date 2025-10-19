@@ -5,7 +5,7 @@ namespace MauiApp.Services;
 /// <summary>
 /// 얼굴 감지 서비스 인터페이스
 /// </summary>
-public interface IFaceDetectionService
+public interface IFaceDetectionService : IDisposable
 {
     Task<bool> InitializeAsync();
     Task<FaceDetectionResult> DetectFacesAsync(byte[] imageData);

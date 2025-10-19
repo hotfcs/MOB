@@ -81,5 +81,10 @@ public class FaceDetectionService : IFaceDetectionService
 
         return Task.FromResult(result);
     }
+
+    public void Dispose()
+    {
+        // 시뮬레이션 모드는 정리할 리소스 없음
+    }
 }
 

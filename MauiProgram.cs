@@ -23,7 +23,12 @@ public static class MauiProgram
 
 		// 서비스 등록
 		builder.Services.AddSingleton<ICameraService, CameraService>();
-		builder.Services.AddSingleton<IFaceDetectionService, FaceDetectionService>();
+		
+		// 실제 ONNX 얼굴 감지 서비스 사용
+		builder.Services.AddSingleton<IFaceDetectionService, OnnxFaceDetectionService>();
+		// 시뮬레이션 모드로 테스트하려면 아래 주석 해제:
+		// builder.Services.AddSingleton<IFaceDetectionService, FaceDetectionService>();
+		
 		builder.Services.AddSingleton<IProtectionService, ProtectionService>();
 		
 		// ViewModels 등록

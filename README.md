@@ -159,6 +159,27 @@ dotnet build -t:Run -f net9.0-maccatalyst
 - 📚 [MVVM 아키텍처 완전 가이드](Docs/MVVM_Architecture.md)
 - 📊 [MVVM 개선 사항 상세](Docs/MVVM_Improvements.md)
 
+### 🤖 실제 AI 얼굴 감지
+
+**Ultra-Light Face Detection** ONNX 모델 통합:
+
+```bash
+# 모델 자동 다운로드 (Windows)
+powershell -ExecutionPolicy Bypass -File Scripts/download-model.ps1
+
+# 모델 자동 다운로드 (Linux/macOS)
+bash Scripts/download-model.sh
+```
+
+**주요 특징**:
+- ⚡ 빠른 추론 속도 (모바일 최적화)
+- 🎯 높은 정확도 (신뢰도 70% 이상)
+- 📦 가벼운 모델 크기 (1.2MB)
+- 👥 다중 얼굴 동시 감지
+- 🔄 NMS (Non-Maximum Suppression) 적용
+
+**설정 가이드**: [ONNX 얼굴 감지 완전 가이드](Docs/ONNX_FaceDetection_Setup.md)
+
 ---
 
 ## 📱 사용 방법
@@ -187,14 +208,15 @@ dotnet build -t:Run -f net9.0-maccatalyst
 - 타인의 사진을 무단으로 촬영하는 것은 불법일 수 있습니다
 
 ### 정확도
-- 현재 버전은 시뮬레이션 모드로 동작합니다
-- 실제 얼굴 감지 기능을 위해서는 ML 모델 통합이 필요합니다
+- ✅ **실제 ONNX 얼굴 감지 모델 통합 완료!**
+- Ultra-Light Face Detection 모델 사용 (1.2MB)
 - 조명 조건에 따라 감지 정확도가 달라질 수 있습니다
+- 모델 설정: [ONNX 얼굴 감지 설정 가이드](Docs/ONNX_FaceDetection_Setup.md)
 
 ## 🔮 향후 개발 계획
 
 ### 단기
-- [ ] 실제 얼굴 감지 모델 통합 (ONNX)
+- [x] 실제 얼굴 감지 모델 통합 (ONNX) ✅
 - [ ] 위장 화면 템플릿 추가
 - [ ] 감지 로그 및 통계
 - [ ] 다크 모드 지원
