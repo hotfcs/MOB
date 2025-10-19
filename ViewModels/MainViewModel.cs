@@ -172,27 +172,41 @@ public partial class MainViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// 카메라 모드 표시 여부
+    /// 감지 테스트 모드 표시 여부
     /// </summary>
     [ObservableProperty]
     private bool isCameraModeVisible;
 
     /// <summary>
-    /// 카메라 모드 토글 커맨드
-    /// 클릭 시 카메라를 활성화하고 영상을 표시
+    /// 감지된 얼굴 수 (실시간)
+    /// </summary>
+    [ObservableProperty]
+    private int detectedFaceCount;
+
+    /// <summary>
+    /// 감지 테스트 상태 메시지
+    /// </summary>
+    [ObservableProperty]
+    private string detectionTestStatus = "대기 중";
+
+    /// <summary>
+    /// 감지 테스트 토글 커맨드
+    /// 클릭 시 카메라를 활성화하고 영상과 감지 상태를 표시
     /// </summary>
     [RelayCommand]
     private async Task ToggleCameraModeAsync()
     {
         if (IsCameraModeVisible)
         {
-            // 카메라 모드 종료
+            // 감지 테스트 종료
             IsCameraModeVisible = false;
+            DetectedFaceCount = 0;
+            DetectionTestStatus = "대기 중";
             StatusMessage = IsDetectionActive ? $"🟢 감지 활성화 - {ModeDescription}" : "감지 중지됨";
         }
         else
         {
-            // 카메라 모드 시작
+            // 감지 테스트 시작
             try
             {
                 StatusMessage = "카메라 권한 확인 중...";
@@ -202,19 +216,39 @@ public partial class MainViewModel : BaseViewModel
                 {
                     await Shell.Current.DisplayAlert(
                         "권한 필요",
-                        "카메라 모드를 사용하려면 카메라 권한이 필요합니다.",
+                        "감지 테스트를 사용하려면 카메라 권한이 필요합니다.",
                         "확인");
                     StatusMessage = "카메라 권한 거부됨";
                     return;
                 }
 
+                // 얼굴 인식 서비스 초기화 확인
+                if (!_faceDetectionService.IsInitialized)
+                {
+                    DetectionTestStatus = "서비스 초기화 중...";
+                    var initSuccess = await _faceDetectionService.InitializeAsync();
+                    
+                    if (!initSuccess)
+                    {
+                        await Shell.Current.DisplayAlert(
+                            "초기화 실패",
+                            "얼굴 인식 서비스를 초기화할 수 없습니다.\nONNX 모델 파일을 확인하세요.",
+                            "확인");
+                        DetectionTestStatus = "초기화 실패";
+                        StatusMessage = "얼굴 인식 서비스 오류";
+                        return;
+                    }
+                }
+
                 IsCameraModeVisible = true;
-                StatusMessage = "📹 카메라 모드 활성화";
+                DetectionTestStatus = "준비 완료";
+                StatusMessage = "🔍 감지 테스트 활성화";
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("오류", ex.Message, "확인");
                 StatusMessage = $"오류: {ex.Message}";
+                DetectionTestStatus = "오류 발생";
             }
         }
     }
